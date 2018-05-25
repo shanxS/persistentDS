@@ -3,14 +3,16 @@ package com.simpleharmonic.persistentds;
 public class Main {
 
     public static void main(String[] args) {
-        BST bst = new BST();
-        bst.insert(5);
-        bst.insert(3);
-        bst.insert(9);
-        bst.insert(8);
-        bst.insert(4);
-        bst.insert(1);
+        int[] arr = {100,50,200,25,75,150,300,125,175,112,135,165,180,160,170};
 
+        BST bst = new BST();
+        for(int i : arr) {
+            bst.insert(i);
+        }
+
+        bst.print();
+        bst.delete(170);
+        System.out.println();
         bst.print();
 
     }
