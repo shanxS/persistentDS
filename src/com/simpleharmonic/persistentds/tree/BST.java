@@ -1,20 +1,29 @@
-package com.simpleharmonic.persistentds;
+package com.simpleharmonic.persistentds.tree;
 
 
+import com.simpleharmonic.persistentds.persistence.HeadHistorical;
+import com.simpleharmonic.persistentds.persistence.data.NodeType;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 public class BST {
-    private Node head;
+    protected Node head;
+    protected HeadHistorical headVersions;
+    protected int currentVersion;
 
-    public BST() {}
+    public BST() {
+        currentVersion = 0;
+        headVersions = new HeadHistorical();
+    }
 
     public void insert(int v) {
         if (head == null) {
-            head = new Node(v);
+            head = new Node(v, currentVersion);
+            headVersions.addNewVersion(head, currentVersion);
         } else {
             insert(head, v);
         }
+
+        ++currentVersion;
     }
 
     private void insert(Node node, int v) {
@@ -22,21 +31,37 @@ public class BST {
             if (node.getRight() != null) {
                 insert(node.getRight(), v);
             } else {
-                node.setRight(new Node(v));
+                node.setRight(new Node(v, currentVersion), currentVersion);
             }
         } else if (node.getValue() > v) {
             if (node.getLeft() != null) {
                 insert(node.getLeft(), v);
             } else {
-                node.setLeft(new Node(v));
+                node.setLeft(new Node(v, currentVersion), currentVersion);
             }
         } else {
             System.out.println("Value already exist in BST");
         }
     }
 
-    public void print() {
-        print(head);
+    public void findNode(int v) {
+        findNode(head, v);
+    }
+
+    private void findNode(Node node, int v) {
+        if (node == null) {
+            System.out.println("cant find node with value " + v);
+        } else if (node.getValue() == v) {
+            printNode(node);
+        } else if (node.getValue() > v) {
+            findNode(node.getLeft(), v);
+        } else {
+            findNode(node.getRight(), v);
+        }
+    }
+
+    public void printTree() {
+        printTree(head);
     }
 
     @AllArgsConstructor
@@ -50,14 +75,17 @@ public class BST {
         if (delVector == null) {
             System.out.println("cant find node with target value");
         } else {
+
+            ++currentVersion;
+
             if (delVector.parent == null) {
                 head = delVector.replacement;
             } else {
 
                 if (delVector.parent.getValue() < v) {
-                    delVector.parent.setRight(delVector.replacement);
+                    delVector.parent.setRight(delVector.replacement, currentVersion);
                 } else if (delVector.parent.getValue() > v) {
-                    delVector.parent.setLeft(delVector.replacement);
+                    delVector.parent.setLeft(delVector.replacement, currentVersion);
                 } else {
                     System.out.println("we should not have reached here");
                 }
@@ -96,14 +124,14 @@ public class BST {
         if (target.getRight() != null) {
             replacement = target.getRight();
             Node orphan = replacement.getLeft();
-            replacement.setLeft(target.getLeft());
+            replacement.setLeft(target.getLeft(), currentVersion);
             reParent(replacement, orphan);
 
             return new DeleteVector(parent, replacement);
         }  else if (target.getLeft() != null) {
             replacement = target.getLeft();
             Node orphan = replacement.getRight();
-            replacement.setRight(target.getRight());
+            replacement.setRight(target.getRight(), currentVersion);
             reParent(replacement, orphan);
 
             return new DeleteVector(parent, replacement);
@@ -115,27 +143,31 @@ public class BST {
     private void reParent(Node node, Node orphan) {
         if (node.getValue() < orphan.getValue()) {
             if (node.getRight() == null) {
-                node.setRight(orphan);
+                node.setRight(orphan, currentVersion);
             } else {
                 reParent(node.getRight(), orphan);
             }
         } else if (node.getValue() > orphan.getValue()) {
             if (node.getLeft() == null) {
-                node.setLeft(orphan);
+                node.setLeft(orphan, currentVersion);
             } else {
                 reParent(node.getLeft(), orphan);
             }
         }
     }
 
-    private void print(Node node) {
+    private void printTree(Node node) {
         if (node == null) {
             return;
         }
 
-        print(node.getLeft());
+        printTree(node.getLeft());
+        printNode(node);
+        printTree(node.getRight());
+    }
 
-        System.out.print(node.getValue());
+    private void printNode(Node node) {
+        System.out.print(node.getValue() + " ver: " + node.getCurrentVersion());
         if (node.getLeft() != null) {
             System.out.print(" left -> " + node.getLeft().getValue());
         }
@@ -143,8 +175,6 @@ public class BST {
             System.out.print(" right -> " + node.getRight().getValue());
         }
         System.out.println();
-
-        print(node.getRight());
     }
 
 }
