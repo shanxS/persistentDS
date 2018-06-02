@@ -24,9 +24,11 @@ public class Node {
             return null;
         }
 
-//        System.out.println("Node " + value
-//                           + " left version selected "
-//                           + ((children.getLeft() == null) ? "null" : children.getLeft().value));
+//        if (children.getLeft() != null) {
+//            System.out.println(" Node " + value + ":" + currentVersion
+//                               + " left version selected "
+//                               + children.getVersion());
+//        }
 
         return children.getLeft();
     }
@@ -37,9 +39,11 @@ public class Node {
             return null;
         }
 
-//        System.out.println("Node " + value
-//                           + " right version selected "
-//                           + ((children.getRight() == null) ? "null" : children.getRight().value));
+//        if (children.getRight() != null) {
+//            System.out.println(" Node " + value + ":" + currentVersion
+//                               + " right version selected "
+//                               + children.getVersion());
+//        }
 
         return children.getRight();
     }

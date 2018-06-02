@@ -20,10 +20,9 @@ public class BST {
             head = new Node(v, currentVersion);
             headVersions.addNewVersion(head, currentVersion);
         } else {
+            ++currentVersion;
             insert(head, v);
         }
-
-        ++currentVersion;
     }
 
     private void insert(Node node, int v) {
@@ -71,12 +70,14 @@ public class BST {
     }
 
     public void delete(int v) {
+        ++currentVersion;
+
         DeleteVector delVector = computeDeletionVector(head, v);
         if (delVector == null) {
             System.out.println("cant find node with target value");
         } else {
 
-            ++currentVersion;
+
 
             if (delVector.parent == null) {
                 head = delVector.replacement;
@@ -137,21 +138,28 @@ public class BST {
             return new DeleteVector(parent, replacement);
         }
 
+        target.setLeft(null, currentVersion);
+        target.setRight(null, currentVersion);
+
         return new DeleteVector(parent, replacement);
     }
 
-    private void reParent(Node node, Node orphan) {
-        if (node.getValue() < orphan.getValue()) {
-            if (node.getRight() == null) {
-                node.setRight(orphan, currentVersion);
+    private void reParent(Node replacement, Node orphan) {
+        if (orphan == null) {
+            return;
+        }
+
+        if (replacement.getValue() < orphan.getValue()) {
+            if (replacement.getRight() == null) {
+                replacement.setRight(orphan, currentVersion);
             } else {
-                reParent(node.getRight(), orphan);
+                reParent(replacement.getRight(), orphan);
             }
-        } else if (node.getValue() > orphan.getValue()) {
-            if (node.getLeft() == null) {
-                node.setLeft(orphan, currentVersion);
+        } else if (replacement.getValue() > orphan.getValue()) {
+            if (replacement.getLeft() == null) {
+                replacement.setLeft(orphan, currentVersion);
             } else {
-                reParent(node.getLeft(), orphan);
+                reParent(replacement.getLeft(), orphan);
             }
         }
     }
