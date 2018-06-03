@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceSets.main.java.srcDirs = ['src']
+mainClassName = 'com.simpleharmonic.persistentds.Main'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
+}
