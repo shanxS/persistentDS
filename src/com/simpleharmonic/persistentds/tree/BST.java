@@ -87,6 +87,7 @@ public class BST {
 
             if (delVector.parent == null) {
                 head = delVector.replacement;
+                headVersions.addNewVersion(head, currentVersion);
             } else {
 
                 if (delVector.parent.getValue() < v) {

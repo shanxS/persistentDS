@@ -26,7 +26,7 @@ public class Main {
         }
 
         System.out.println("Starting deletion ");
-        bst.delete(150);
+        bst.delete(100);
         System.out.println("for version " + arr.length);
         ((Chronos)bst).printTreeVersion(arr.length);
 
