@@ -43,19 +43,21 @@ public class BST {
         }
     }
 
-    public void findNode(int v) {
-        findNode(head, v);
+    public boolean findNode(int v) {
+        return findNode(head, v);
     }
 
-    private void findNode(Node node, int v) {
+    private boolean findNode(Node node, int v) {
         if (node == null) {
             System.out.println("cant find node with value " + v);
+            return false;
         } else if (node.getValue() == v) {
             printNode(node);
+            return true;
         } else if (node.getValue() > v) {
-            findNode(node.getLeft(), v);
+            return findNode(node.getLeft(), v);
         } else {
-            findNode(node.getRight(), v);
+            return findNode(node.getRight(), v);
         }
     }
 
@@ -70,6 +72,10 @@ public class BST {
     }
 
     public void delete(int v) {
+        if (!findNode(v)) {
+            System.out.println("node does not exist");
+            return;
+        }
         ++currentVersion;
 
         DeleteVector delVector = computeDeletionVector(head, v);
