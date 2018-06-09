@@ -1,11 +1,12 @@
-package com.simpleharmonic.persistentds;
+package com.simpleharmonic.persistentds.ll;
 
-import com.simpleharmonic.persistentds.ll.FPLL;
-import com.simpleharmonic.persistentds.ll.FullyPersistedLinkedList;
+import org.junit.Test;
 
-public class Main {
 
-    public static void main(String[] args) {
+public class MainTests {
+
+    @Test
+    public void testMultipleLists() {
         int[] arr = {100,50,200,25,75,150,300,125,175,112,135,165,180,160,170,190};
         int[] arr2 = {100,200,50};
         int[] arr3 = {100,50,200,25,75,150,300,125,112,135};
@@ -33,6 +34,7 @@ public class Main {
         for (int i=1; i<=ll.getMaxVersion(); ++i) {
             ll.print(i);
         }
+
     }
 
 }

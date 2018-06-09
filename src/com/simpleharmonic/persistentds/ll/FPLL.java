@@ -16,13 +16,26 @@ public class FPLL <T> implements FullyPersistedLinkedList<T> {
 
 
     @Override
-    public int add(T element, int version) {
+    public int getMaxVersion() {
+        return maxVersion;
+    }
+
+    @Override
+    public int createNew(T element) {
         ++maxVersion;
+        versionHead.put(maxVersion, new Node(element));
+        return maxVersion;
+    }
+
+    @Override
+    public int addToVersion(T element, int version) {
         if (versionHead.get(version) == null) {
-            versionHead.put(version, new Node(element, version));
-        } else {
-            addSequentially(element, version, versionHead.get(version));
+            throw new RuntimeException("Version does not exist");
         }
+
+        ++maxVersion;
+        addSequentially(element, version, versionHead.get(version));
+        versionHead.put(maxVersion, versionHead.get(version));
 
         return maxVersion;
     }
@@ -32,26 +45,36 @@ public class FPLL <T> implements FullyPersistedLinkedList<T> {
             addSequentially(element, version, node.getNextNode(version));
             node.appendVersion(version, maxVersion);
         } else {
-            node.setNextNode(version, new Node(element, maxVersion));
+            node.setNextNode(maxVersion, version, new Node(element));
         }
     }
 
     @Override
-    public void addFirst(T element, int version) {
+    public int addFirstToVersion(T element, int version) {
+        if (version > maxVersion) {
+            throw new RuntimeException("Version doesnt exist yet");
+        }
+
+        ++maxVersion;
+        Node node = new Node(element);
+        versionHead.put(maxVersion, node);
+        node.setNextNode(maxVersion, versionHead.get(version));
+
+        return maxVersion;
     }
 
     @Override
-    public void addAfter(T element, int version, T predecessor) {
+    public void addAfterToVersion(T element, int version, T predecessor) {
 
     }
 
     @Override
-    public T remove(T element, int version) {
+    public T removeFromVersion(T element, int version) {
         return null;
     }
 
     @Override
-    public boolean find(T element, int version) {
+    public boolean findInVersion(T element, int version) {
         return false;
     }
 
