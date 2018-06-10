@@ -2,6 +2,11 @@ package com.simpleharmonic.persistentds.ll;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+
 
 public class MainTests {
 
@@ -26,13 +31,30 @@ public class MainTests {
 
         version = ll.createNew(arr3[0]);
         System.out.println("version created " + version);
-        for (int i=0; i<arr3.length; ++i) {
+        for (int i=1; i<arr3.length; ++i) {
             ll.addToVersion(arr3[i], version);
         }
 
 
         for (int i=1; i<=ll.getMaxVersion(); ++i) {
-            ll.print(i);
+            ArrayList<Integer> list = ll.get(i);
+            list.forEach(x -> System.out.print(" " + x));
+
+            if (i==1) {
+                assertEquals(list.size(), arr.length);
+            } else if (i>1 && i<17){
+                assertEquals(list.size(), i);
+            } else if (i==17) {
+                assertEquals(list.size(), arr2.length);
+            } else if (i>17 && i<20) {
+                assertEquals(list.size(), i-17+1);
+            } else if (i==20) {
+                assertEquals(list.size(), arr3.length);
+            } else if (i>20) {
+                assertEquals(list.size(), i-20+1);
+            }
+
+            System.out.println();
         }
 
     }

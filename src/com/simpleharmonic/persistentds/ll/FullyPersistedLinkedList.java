@@ -1,5 +1,6 @@
 package com.simpleharmonic.persistentds.ll;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface FullyPersistedLinkedList <T> {
@@ -12,6 +13,6 @@ public interface FullyPersistedLinkedList <T> {
     T removeFromVersion(T element, int version);
     boolean findInVersion(T element, int version);
     List<Integer> findVersions(T element);
-    void print(int version);
+    ArrayList<T> get(int version);
 
 }

@@ -1,5 +1,6 @@
 package com.simpleharmonic.persistentds.ll;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,21 +85,23 @@ public class FPLL <T> implements FullyPersistedLinkedList<T> {
     }
 
     @Override
-    public void print(int version) {
+    public ArrayList<T> get(int version) {
         if (versionHead.get(version) == null) {
             System.out.println("This version does not exist " + version);
+            return null;
         } else {
-            System.out.println();
-            printSequentially(versionHead.get(version), version);
+            ArrayList<T> list = new ArrayList<>();
+            getSequentially(versionHead.get(version), version, list);
+            return list;
         }
     }
 
-    private void printSequentially(Node node, int version) {
+    private void getSequentially(Node<T> node, int version, ArrayList<T> list) {
         if (node == null) {
             return;
         }
 
-        System.out.print(node.getValue() + " ");
-        printSequentially(node.getNextNode(version), version);
+        list.add(node.getValue());
+        getSequentially(node.getNextNode(version), version, list);
     }
 }

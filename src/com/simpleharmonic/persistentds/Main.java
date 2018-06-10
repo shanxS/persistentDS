@@ -31,7 +31,8 @@ public class Main {
 
 
         for (int i=1; i<=ll.getMaxVersion(); ++i) {
-            ll.print(i);
+            ll.get(i).forEach(x -> System.out.print(" " + x));
+            System.out.println();
         }
     }
 
