@@ -46,7 +46,7 @@ public class FPLL <T> implements FullyPersistedLinkedList<T> {
             addSequentially(element, version, node.getNextNode(version));
             node.appendVersion(version, maxVersion);
         } else {
-            node.setNextNode(maxVersion, version, new Node(element));
+            node.setNextNode(maxVersion, new Node(element));
         }
     }
 
@@ -60,6 +60,12 @@ public class FPLL <T> implements FullyPersistedLinkedList<T> {
         Node node = new Node(element);
         versionHead.put(maxVersion, node);
         node.setNextNode(maxVersion, versionHead.get(version));
+
+        Node next = node.getNextNode(version);
+        while (next != null) {
+            next.appendVersion(version, maxVersion);
+            next = next.getNextNode(version);
+        }
 
         return maxVersion;
     }

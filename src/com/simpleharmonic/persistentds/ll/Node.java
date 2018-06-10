@@ -12,15 +12,12 @@ public class Node<T> {
         versionNode = new HashMap<>();
     }
 
-    public void setNextNode(int newVersion, int parentVersion, Node node) {
-        if (versionNode.get(newVersion) != null) {
-            throw new RuntimeException("This version already exists,");
-        }
-
-        versionNode.put(newVersion, node);
-        versionNode.put(parentVersion, node);
-    }
-
+    /**
+     * Used when you have to add absolute new node to
+     * absolute new version
+     * @param newVersion
+     * @param node
+     */
     public void setNextNode(int newVersion, Node node) {
         if (versionNode.get(newVersion) != null) {
             throw new RuntimeException("This version already exists,");
