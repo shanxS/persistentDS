@@ -7,14 +7,20 @@ import java.util.List;
 public class FPLL <T> implements FullyPersistedLinkedList<T> {
 
     private final HashMap<Integer, Node> versionHead;
-    private int maxVersion;
+    private int maxVersion, listCount;
 
 
     public FPLL() {
         versionHead = new HashMap<>();
         maxVersion = 0;
+        listCount = 0;
     }
 
+
+    @Override
+    public int getListCountSoFar() {
+        return listCount;
+    }
 
     @Override
     public int getMaxVersion() {
@@ -24,6 +30,7 @@ public class FPLL <T> implements FullyPersistedLinkedList<T> {
     @Override
     public int createNew(T element) {
         ++maxVersion;
+        ++listCount;
         versionHead.put(maxVersion, new Node(element));
         return maxVersion;
     }
@@ -61,7 +68,7 @@ public class FPLL <T> implements FullyPersistedLinkedList<T> {
         versionHead.put(maxVersion, node);
         node.setNextNode(maxVersion, versionHead.get(version));
 
-        Node next = node.getNextNode(version);
+        Node next = node.getNextNode(maxVersion);
         while (next != null) {
             next.appendVersion(version, maxVersion);
             next = next.getNextNode(version);

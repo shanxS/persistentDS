@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface FullyPersistedLinkedList <T> {
 
+    int getListCountSoFar();
     int getMaxVersion();
     int createNew(T element);
     int addToVersion(T element, int version);
